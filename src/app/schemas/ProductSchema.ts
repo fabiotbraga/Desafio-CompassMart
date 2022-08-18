@@ -10,7 +10,7 @@ const schema = new Schema<IProduct>({
   price: { type: Number, required: true },
   qtd_stock: { type: Number, required: true },
   barcodes: { type: String, unique: true, required: true },
-  stock_control_enabled: {type: Boolean }
+  stock_control_enabled: {type: Boolean, default: false }
 }, { timestamps: { createdAt: 'created_at', updatedAt: 'updatedAt' } });
 
 //schema.plugin(paginate);

@@ -20,3 +20,25 @@ export interface IProductResponse {
     barcodes: string;
     stock_control_enabled?: boolean;
 }
+
+export interface IProductUpdate {
+  title: string;
+  description: string;
+  departament: string;
+  brand: string;
+  price: number;
+  qtd_stock: number;
+  barcodes?: string;
+  stock_control_enabled?: boolean
+}
+
+export interface IProductResponseUpdate {
+  _id: Types.ObjectId;
+  title: string;
+  description: string;
+  brand: string;
+  price: number;
+  qtd_stock: number;
+  barcodes?: string;
+  stock_control_enabled?: boolean;
+}

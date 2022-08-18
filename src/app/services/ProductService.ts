@@ -1,6 +1,6 @@
 import BarcodesExist from '../errors/findBarcodeError';
 import IdProductExist from '../errors/idProductError';
-import { IProductResponse, IProduct } from '../interfaces/IProduct';
+import { IProductResponse, IProduct, IProductUpdate, IProductResponseUpdate } from '../interfaces/IProduct';
 import ProductRepository from '../repositories/ProductRepository';
 import { ObjectId } from 'mongoose';
 
@@ -18,6 +18,12 @@ class ProductService {
 
   async findById (id: ObjectId): Promise<IProductResponse | null> {
     const result = await ProductRepository.findById(id);
+    if (result == null) throw new IdProductExist();
+    return result;
+  }
+
+  async updateProduct (id: ObjectId, payload: IProductUpdate): Promise<IProductResponseUpdate|null> {
+    const result = await ProductRepository.update(id, payload);
     if (result == null) throw new IdProductExist();
     return result;
   }

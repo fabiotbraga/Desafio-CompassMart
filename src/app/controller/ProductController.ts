@@ -5,12 +5,12 @@ const ObjectId = require('mongodb').ObjectId;
 class ProductController {
   async create(req: Request, res: Response) {
     try {
-      const { title, description, departament, brand, price, qtd_stock, barcodes, stock_control_enabled } = req.body;
+      const { title, description, departament, brand, price, qtd_stock, barcodes } = req.body;
       if ( req.body.qtd_stock > 0) {
         const result = await ProductService.create({ title, description, departament, brand, price, qtd_stock, barcodes, stock_control_enabled: true});
         return res.status(201).json(result);
       } else {
-        const result = await ProductService.create({ title, description, departament, brand, price, qtd_stock, barcodes});
+        const result = await ProductService.create({ title, description, departament, brand, price, qtd_stock, barcodes, stock_control_enabled: false});
         return res.status(201).json(result);
       }
       
@@ -37,6 +37,32 @@ class ProductController {
       return res.status(500).json({ error });
     }
   }
+
+  async update (req: Request, res: Response) {
+    try {
+      const id = new ObjectId(req.params.id);
+      const { title, description, departament, brand, price, qtd_stock } = req.body;
+      if ( req.body.qtd_stock > 0) {
+        const result = await ProductService.updateProduct(id, { title, description, departament, brand, price, qtd_stock, stock_control_enabled: true});
+        return res.status(201).json(result);
+      } else {
+        const result = await ProductService.updateProduct(id, { title, description, departament, brand, price, qtd_stock, stock_control_enabled: false});
+        return res.status(201).json(result);
+      }
+    } catch (error) {
+      return res.status(500).json({ error });
+    }
+  }
+
+  /*
+  if ( req.body.qtd_stock > 0) {
+        const result = await ProductService.create({ title, description, departament, brand, price, qtd_stock, barcodes, stock_control_enabled: true});
+        return res.status(201).json(result);
+      } else {
+        const result = await ProductService.create({ title, description, departament, brand, price, qtd_stock, barcodes});
+        return res.status(201).json(result);
+      }
+  */
 
   async delete (req: Request, res: Response) {
     try {

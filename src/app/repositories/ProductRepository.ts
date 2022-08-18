@@ -1,4 +1,4 @@
-import { IProduct, IProductResponse } from '../interfaces/IProduct';
+import { IProduct, IProductResponse, IProductResponseUpdate, IProductUpdate } from '../interfaces/IProduct';
 import ProductSchema from '../schemas/ProductSchema';
 import { ObjectId } from 'mongoose';
 
@@ -19,6 +19,10 @@ class ProductRepository {
 
   async findById (id: ObjectId): Promise<IProductResponse | null> {
     return ProductSchema.findById({_id: id});
+  }
+
+  async update (id: ObjectId, payload: IProductUpdate): Promise<IProductResponseUpdate | null> {
+    return await ProductSchema.findOneAndUpdate({ _id: id }, payload, {returnOriginal: false});
   }
 
   async delete (id: ObjectId): Promise<IProductResponse | null> {
