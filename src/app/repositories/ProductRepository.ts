@@ -21,6 +21,10 @@ class ProductRepository {
     return ProductSchema.findById({_id: id});
   }
 
+  async lowStock (): Promise<IProductResponse[]> {
+    return ProductSchema.find().where('qtd_stock').lt(100).where('stock_control_enabled').equals(true).sort({qtd_stock: 1});
+  }
+
   async update (id: ObjectId, payload: IProductUpdate): Promise<IProductResponseUpdate | null> {
     return await ProductSchema.findOneAndUpdate({ _id: id }, payload, {returnOriginal: false});
   }

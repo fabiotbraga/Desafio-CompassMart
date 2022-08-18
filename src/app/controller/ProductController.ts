@@ -28,6 +28,15 @@ class ProductController {
     }
   }
 
+  async lowStock (req: Request, res: Response) {
+    try {
+      const result = await ProductService.lowStock();
+      return res.status(200).json(result);
+    } catch (error) {
+      return res.status(400).json({ error });
+    }
+  }
+
   async findById (req: Request, res: Response) {
     try {
       const id = new ObjectId(req.params.id);
@@ -53,16 +62,6 @@ class ProductController {
       return res.status(500).json({ error });
     }
   }
-
-  /*
-  if ( req.body.qtd_stock > 0) {
-        const result = await ProductService.create({ title, description, departament, brand, price, qtd_stock, barcodes, stock_control_enabled: true});
-        return res.status(201).json(result);
-      } else {
-        const result = await ProductService.create({ title, description, departament, brand, price, qtd_stock, barcodes});
-        return res.status(201).json(result);
-      }
-  */
 
   async delete (req: Request, res: Response) {
     try {
