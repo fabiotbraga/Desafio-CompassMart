@@ -12,6 +12,7 @@ router.post(`${mainRoute}`, ProductValidation, ProductController.create);
 router.patch(`${mainRoute}/:id`, PatchUpdateProductValidation, ProductController.update);
 router.put(`${mainRoute}/:id`, UpdateProductValidation, ProductController.update);
 router.get(`${mainRoute}/low_stock`, ProductController.lowStock);
+router.get(`${mainRoute}/busca`, ProductController.busca); //teste
 router.get(`${mainRoute}/:id`, FindByIdProductValidation, ProductController.findById);
 router.get(`${mainRoute}`, ProductController.findAll);
 router.delete(`${mainRoute}/:id`, deleteProductValidation, ProductController.delete);

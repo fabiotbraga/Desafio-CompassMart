@@ -21,7 +21,18 @@ class ProductController {
 
   async findAll (req: Request, res: Response) {
     try {
-      const result = await ProductService.findAll();
+      const query = req.query;
+      const page = req.query;
+      const result = await ProductService.findAll(query, page || 1);
+      return res.status(200).json(result);
+    } catch (error) {
+      return res.status(400).json({ error });
+    }
+  }
+  //teste
+  async busca (req: Request, res: Response) {
+    try {
+      const result = await ProductService.busca();
       return res.status(200).json(result);
     } catch (error) {
       return res.status(400).json({ error });

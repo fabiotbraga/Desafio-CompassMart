@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-//import paginate from 'mongoose-paginate-v2';
+import paginate from 'mongoose-paginate-v2';
 import { IProduct } from '../interfaces/IProduct'
 
 const schema = new Schema<IProduct>({
@@ -13,9 +13,11 @@ const schema = new Schema<IProduct>({
   stock_control_enabled: {type: Boolean, default: false }
 }, { timestamps: { createdAt: 'created_at', updatedAt: 'updatedAt' } });
 
-//schema.plugin(paginate);
+//schema.query.byYear = function (brand) {
+//  return this.find({ brand: brand })
+//}
+schema.plugin(paginate);
 
-const Product = mongoose.model<IProduct>('product', schema);
-//const User = mongoose.model<IUser>('User', schema);
-//const Product = mongoose.model<IProduct, mongoose.PaginateModel<any>>('product', schema);
+//const Product = mongoose.model<IProduct>('product', schema);
+const Product = mongoose.model<IProduct, mongoose.PaginateModel<IProduct>>('product', schema);
 export default Product

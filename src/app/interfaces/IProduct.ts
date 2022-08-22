@@ -21,6 +21,12 @@ export interface IProductResponse {
     stock_control_enabled?: boolean;
 }
 
+export interface IProductPaginate {
+  departament?: string;
+  brand?: string;
+  stock_control_enabled?: boolean
+}
+
 export interface IProductUpdate {
   title: string;
   description: string;

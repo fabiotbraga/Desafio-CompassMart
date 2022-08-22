@@ -1,6 +1,8 @@
-import { IProduct, IProductResponse, IProductResponseUpdate, IProductUpdate } from '../interfaces/IProduct';
+import { IProduct, IProductPaginate, IProductResponse, IProductResponseUpdate, IProductUpdate } from '../interfaces/IProduct';
 import ProductSchema from '../schemas/ProductSchema';
 import { ObjectId } from 'mongoose';
+import { PaginateResult } from 'mongoose';
+import myCustomLabels from '../utils/ValidateProduct'
 
 class ProductRepository {
   async create(payload: IProduct): Promise<IProductResponse> {
@@ -13,7 +15,22 @@ class ProductRepository {
     return false;
   }
 
-  async findAll (): Promise<IProductResponse[]> {
+  async findAll (query: IProductPaginate , page: any): Promise<PaginateResult<IProductPaginate>> {
+    const queryl = {
+      departament: { $regex: query.departament || ''},
+      brand: { $regex: query.brand || ''},
+      stock_control_enabled: true
+    }
+    const options = {
+      page: page || 1,
+      limit: 50,
+      customLabels: myCustomLabels
+    };
+    const products = await ProductSchema.paginate(queryl, options);
+    return products;
+  }
+  //teste
+  async busca (): Promise<IProductResponse[] | null> {
     return ProductSchema.find();
   }
 
