@@ -1,8 +1,8 @@
 import BarcodesExist from '../errors/findBarcodeError';
 import IdProductExist from '../errors/idProductError';
-import { IProductResponse, IProduct, IProductUpdate, IProductResponseUpdate } from '../interfaces/IProduct';
+import { IProductResponse, IProduct, IProductUpdate, IProductResponseUpdate, IProductPaginate } from '../interfaces/IProduct';
 import ProductRepository from '../repositories/ProductRepository';
-import { ObjectId } from 'mongoose';
+import { ObjectId, PaginateResult } from 'mongoose';
 
 class ProductService {
   async create(payload: IProduct): Promise<IProductResponse> {
@@ -12,8 +12,12 @@ class ProductService {
     return result;
   }
 
-  async findAll (): Promise<IProductResponse[]> {
-    return await ProductRepository.findAll();
+  async findAll (query: IProductPaginate, page: any): Promise<PaginateResult<IProductPaginate>> {
+    return await ProductRepository.findAll(query, page || 1);
+  }
+  //teste
+  async busca (): Promise<IProductResponse[] | null> {
+    return await ProductRepository.busca();
   }
 
   async findById (id: ObjectId): Promise<IProductResponse | null> {
