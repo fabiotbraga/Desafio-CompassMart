@@ -16,7 +16,7 @@ class ProductRepository {
   }
 
   async findAll (query: IProductPaginate , page: any): Promise<PaginateResult<IProductPaginate>> {
-    const queryl = {
+    const queryall = {
       departament: { $regex: query.departament || ''},
       brand: { $regex: query.brand || ''},
       stock_control_enabled: true
@@ -26,7 +26,7 @@ class ProductRepository {
       limit: 50,
       customLabels: myCustomLabels
     };
-    const products = await ProductSchema.paginate(queryl, options);
+    const products = await ProductSchema.paginate(queryall, options);
     return products;
   }
   //teste
@@ -38,8 +38,20 @@ class ProductRepository {
     return ProductSchema.findById({_id: id});
   }
 
-  async lowStock (): Promise<IProductResponse[]> {
-    return ProductSchema.find().where('qtd_stock').lt(100).where('stock_control_enabled').equals(true).sort({qtd_stock: 1});
+  async lowStock (page: any): Promise<PaginateResult<IProductPaginate>> {
+    const querylow = {
+      stock_control_enabled: true,
+      qtd_stock: { $lt: 100 }
+    }
+    const options = {
+      page: page || 1,
+      limit: 50,
+      sort: {qtd_stock: 1},
+      customLabels: myCustomLabels
+    };
+    const products = await ProductSchema.paginate(querylow, options);
+    return products;
+    //return ProductSchema.find().where('qtd_stock').lt(100).where('stock_control_enabled').equals(true).sort({qtd_stock: 1});
   }
 
   async update (id: ObjectId, payload: IProductUpdate): Promise<IProductResponseUpdate | null> {
