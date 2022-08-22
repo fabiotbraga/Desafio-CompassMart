@@ -26,8 +26,8 @@ class ProductService {
     return result;
   }
 
-  async lowStock (): Promise<IProductResponse[]> {
-    return await ProductRepository.lowStock();
+  async lowStock (page: any): Promise<PaginateResult<IProductPaginate>> {
+    return await ProductRepository.lowStock(page || 1);
   }
 
   async updateProduct (id: ObjectId, payload: IProductUpdate): Promise<IProductResponseUpdate|null> {

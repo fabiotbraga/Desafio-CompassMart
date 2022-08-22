@@ -41,7 +41,8 @@ class ProductController {
 
   async lowStock (req: Request, res: Response) {
     try {
-      const result = await ProductService.lowStock();
+      const page = req.query;
+      const result = await ProductService.lowStock(page || 1);
       return res.status(200).json(result);
     } catch (error) {
       return res.status(400).json({ error });
