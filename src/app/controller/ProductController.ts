@@ -5,15 +5,26 @@ const ObjectId = require('mongodb').ObjectId;
 class ProductController {
   async create(req: Request, res: Response) {
     try {
-      const { title, description, departament, brand, price, qtd_stock, barcodes } = req.body;
+      const { title, description, department, brand, price, qtd_stock, barcodes } = req.body;
       if ( req.body.qtd_stock > 0) {
-        const result = await ProductService.create({ title, description, departament, brand, price, qtd_stock, barcodes, stock_control_enabled: true});
+        const result = await ProductService.create({ title, description, department, brand, price, qtd_stock, barcodes, stock_control_enabled: true});
         return res.status(201).json(result);
       } else {
-        const result = await ProductService.create({ title, description, departament, brand, price, qtd_stock, barcodes, stock_control_enabled: false});
+        const result = await ProductService.create({ title, description, department, brand, price, qtd_stock, barcodes, stock_control_enabled: false});
         return res.status(201).json(result);
       }
       
+    } catch (error) {
+      return res.status(500).json({ error });
+    }
+  }
+
+  async csv(req: Request, res: Response) {
+    try {
+      const { file } = req;
+      const  buffer  = file?.buffer.toString("utf-8");;
+      const result = await ProductService.csv(buffer!)
+      return res.status(200).json(result); 
     } catch (error) {
       return res.status(500).json({ error });
     }
@@ -29,16 +40,7 @@ class ProductController {
       return res.status(400).json({ error });
     }
   }
-  //teste
-  async busca (req: Request, res: Response) {
-    try {
-      const result = await ProductService.busca();
-      return res.status(200).json(result);
-    } catch (error) {
-      return res.status(400).json({ error });
-    }
-  }
-
+ 
   async lowStock (req: Request, res: Response) {
     try {
       const page = req.query;
@@ -62,12 +64,12 @@ class ProductController {
   async update (req: Request, res: Response) {
     try {
       const id = new ObjectId(req.params.id);
-      const { title, description, departament, brand, price, qtd_stock } = req.body;
+      const { title, description, department, brand, price, qtd_stock } = req.body;
       if ( req.body.qtd_stock > 0) {
-        const result = await ProductService.updateProduct(id, { title, description, departament, brand, price, qtd_stock, stock_control_enabled: true});
+        const result = await ProductService.updateProduct(id, { title, description, department, brand, price, qtd_stock, stock_control_enabled: true});
         return res.status(201).json(result);
       } else {
-        const result = await ProductService.updateProduct(id, { title, description, departament, brand, price, qtd_stock, stock_control_enabled: false});
+        const result = await ProductService.updateProduct(id, { title, description, department, brand, price, qtd_stock, stock_control_enabled: false});
         return res.status(201).json(result);
       }
     } catch (error) {

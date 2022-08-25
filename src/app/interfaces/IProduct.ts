@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 export interface IProduct {
     title: string;
     description: string;
-    departament: string;
+    department: string;
     brand: string;
     price: number;
     qtd_stock: number;
@@ -22,7 +22,7 @@ export interface IProductResponse {
 }
 
 export interface IProductPaginate {
-  departament?: string;
+  department?: string;
   brand?: string;
   stock_control_enabled?: boolean
 }
@@ -30,7 +30,7 @@ export interface IProductPaginate {
 export interface IProductUpdate {
   title: string;
   description: string;
-  departament: string;
+  department: string;
   brand: string;
   price: number;
   qtd_stock: number;
@@ -47,4 +47,11 @@ export interface IProductResponseUpdate {
   qtd_stock: number;
   barcodes?: string;
   stock_control_enabled?: boolean;
+}
+
+
+export interface IProductResponseCsv {
+  sucess: number;
+  errors: number
+  errors_details
 }

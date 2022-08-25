@@ -3,10 +3,13 @@ import ProductSchema from '../schemas/ProductSchema';
 import { ObjectId } from 'mongoose';
 import { PaginateResult } from 'mongoose';
 import myCustomLabels from '../utils/ValidateProduct'
-
 class ProductRepository {
   async create(payload: IProduct): Promise<IProductResponse> {
     return ProductSchema.create(payload);
+  }
+
+  async csv(file: any): Promise<any> {
+    return ProductSchema.insertMany(file);
   }
 
   async findByBarcodes (value: string): Promise<Boolean> {
@@ -17,7 +20,7 @@ class ProductRepository {
 
   async findAll (query: IProductPaginate , page: any): Promise<PaginateResult<IProductPaginate>> {
     const queryall = {
-      departament: { $regex: query.departament || ''},
+      departament: { $regex: query.department || ''},
       brand: { $regex: query.brand || ''},
       stock_control_enabled: true
     }
