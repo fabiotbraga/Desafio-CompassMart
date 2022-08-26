@@ -8,7 +8,7 @@ class ProductRepository {
     return ProductSchema.create(payload);
   }
 
-  async csv(file: any): Promise<any> {
+  async csv(file: IProduct): Promise<IProductResponse[]> {
     return ProductSchema.insertMany(file);
   }
 
@@ -18,14 +18,14 @@ class ProductRepository {
     return false;
   }
 
-  async findAll (query: IProductPaginate , page: any): Promise<PaginateResult<IProductPaginate>> {
+  async findAll (query: IProductPaginate): Promise<PaginateResult<IProductPaginate>> {
     const queryall = {
-      departament: { $regex: query.department || ''},
+      departament: { $regex: query.departament || ''},
       brand: { $regex: query.brand || ''},
       stock_control_enabled: true
     }
     const options = {
-      page: page || 1,
+      page: query.page || 1,
       limit: 50,
       customLabels: myCustomLabels
     };
@@ -41,20 +41,19 @@ class ProductRepository {
     return ProductSchema.findById({_id: id});
   }
 
-  async lowStock (page: any): Promise<PaginateResult<IProductPaginate>> {
+  async lowStock (page: IProductPaginate): Promise<PaginateResult<IProductPaginate>> {
     const querylow = {
       stock_control_enabled: true,
       qtd_stock: { $lt: 100 }
     }
     const options = {
-      page: page || 1,
+      page: page.page || 1,
       limit: 50,
       sort: {qtd_stock: 1},
       customLabels: myCustomLabels
     };
     const products = await ProductSchema.paginate(querylow, options);
     return products;
-    //return ProductSchema.find().where('qtd_stock').lt(100).where('stock_control_enabled').equals(true).sort({qtd_stock: 1});
   }
 
   async update (id: ObjectId, payload: IProductUpdate): Promise<IProductResponseUpdate | null> {
