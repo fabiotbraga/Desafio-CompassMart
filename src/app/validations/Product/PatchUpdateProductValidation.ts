@@ -10,10 +10,10 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     if (!isValid) throw new IdProductInvalid();
     
     const schema = Joi.object({
-      title: Joi.string(),
-      description: Joi.string(),
-      departament: Joi.string(),
-      brand: Joi.string(),
+      title: Joi.string().trim(),
+      description: Joi.string().trim(),
+      departament: Joi.string().trim(),
+      brand: Joi.string().trim(),
       price: Joi.number().min(0.01).max(1000),
       qtd_stock: Joi.number().max(100000),
     });
