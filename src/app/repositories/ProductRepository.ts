@@ -32,10 +32,6 @@ class ProductRepository {
     const products = await ProductSchema.paginate(queryall, options);
     return products;
   }
-  //teste
-  async busca (): Promise<IProductResponse[] | null> {
-    return ProductSchema.find();
-  }
 
   async findById (id: ObjectId): Promise<IProductResponse | null> {
     return ProductSchema.findById({_id: id});
