@@ -35,7 +35,7 @@ class ProductController {
       const result = await ProductService.findAll(query);
       return res.status(200).json(result);
     } catch (error) {
-      return res.status(400).json({ error });
+      return res.status(500).json({ error });
     }
   }
  
@@ -45,7 +45,7 @@ class ProductController {
       const result = await ProductService.lowStock(page || 1);
       return res.status(200).json(result);
     } catch (error) {
-      return res.status(400).json({ error });
+      return res.status(500).json({ error });
     }
   }
 
@@ -53,7 +53,7 @@ class ProductController {
     try {
       const id = new ObjectId(req.params.id);
       const result = await ProductService.findById(id);
-      return res.status(201).json(result);
+      return res.status(200).json(result);
     } catch (error) {
       return res.status(500).json({ error });
     }
