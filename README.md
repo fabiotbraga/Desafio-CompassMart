@@ -61,31 +61,31 @@ Projeto desenvolvido para o programa de bolsas Compass Uol. O projeto tem a segu
 
 ## Pré-requisitos/Dependências:books:
 
-:green_book: cors
+:green_book: Cors
 
-:green_book: dotenv
+:green_book: Dotenv
 
-:green_book: :eslint
+:green_book: Eslint
 
-:green_book: express
+:green_book: Express
 
-:green_book: joi
+:green_book: Joi
 
 :green_book: MongoDb
 
-:green_book: mongoose
+:green_book: Mongoose
 
-:green_book: mongoose-paginate-v2
+:green_book: Mongoose-paginate-v2
 
-:green_book: multer
+:green_book: Multer
 
 :green_book: Nodejs
 
-:green_book: nodemon
+:green_book: Nodemon
 
 :green_book: Prettier
 
-:green_book: typescript
+:green_book: Typescript
 
 ## Como rodar a aplicação::arrow_forward:
 
