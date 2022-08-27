@@ -29,7 +29,7 @@ class ProductService {
         products.push({
             title: productLineSplit[0],
             description: productLineSplit[1],
-            department: productLineSplit[2],
+            departament: productLineSplit[2],
             brand: productLineSplit[3],
             price: Number(productLineSplit[4]),
             qtd_stock: Number(productLineSplit[5]),
@@ -54,7 +54,7 @@ class ProductService {
         errors.push('description field is null');
         }
       //departament 
-      if (product.department == null) {
+      if (product.departament == null) {
         errors.push('departament field is null');
         }
       //brand 
@@ -98,8 +98,8 @@ class ProductService {
     } 
   }
 
-  async findAll (query: IProductPaginate, page: any): Promise<PaginateResult<IProductPaginate>> {
-    return await ProductRepository.findAll(query, page || 1);
+  async findAll (query: IProductPaginate): Promise<PaginateResult<IProductPaginate>> {
+    return await ProductRepository.findAll(query);
   }
   
   async findById (id: ObjectId): Promise<IProductResponse | null> {
@@ -108,8 +108,8 @@ class ProductService {
     return result;
   }
 
-  async lowStock (page: any): Promise<PaginateResult<IProductPaginate>> {
-    return await ProductRepository.lowStock(page || 1);
+  async lowStock (page: IProductPaginate): Promise<PaginateResult<IProductPaginate>> {
+    return await ProductRepository.lowStock(page);
   }
 
   async updateProduct (id: ObjectId, payload: IProductUpdate): Promise<IProductResponseUpdate|null> {
