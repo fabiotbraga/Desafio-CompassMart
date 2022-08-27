@@ -1,5 +1,7 @@
 # Desafio-CompassMart :department_store:
-Repositório criado para o Desafio Técnico Final - Compass UolCompassStore-Challenge
+Repositório criado para o Desafio Técnico Final - Compass UolCompassStore-Challenge.
+
+> Status do Projeto: Em desenvolvimento :gear:
 
 ## Tópicos::writing_hand:
 
@@ -59,19 +61,31 @@ Projeto desenvolvido para o programa de bolsas Compass Uol. O projeto tem a segu
 
 ## Pré-requisitos/Dependências:books:
 
- - cors
- - dotenv
- - eslint
- - express
- - joi
- - MongoDb
- - mongoose
- - mongoose-paginate-v2
- - multer
- - Nodejs
- - nodemon
- - Prettier
- - typescript
+:green_book: cors
+
+:green_book: dotenv
+
+:green_book: :eslint
+
+:green_book: express
+
+:green_book: joi
+
+:green_book: MongoDb
+
+:green_book: mongoose
+
+:green_book: mongoose-paginate-v2
+
+:green_book: multer
+
+:green_book: Nodejs
+
+:green_book: nodemon
+
+:green_book: Prettier
+
+:green_book: typescript
 
 ## Como rodar a aplicação::arrow_forward:
 
@@ -83,9 +97,13 @@ Projeto desenvolvido para o programa de bolsas Compass Uol. O projeto tem a segu
 
 :four: Rode o código no terminal: `npm run dev`.
 
+## Como rodar os testes::hammer_and_wrench:
+
+:warning: Testes estão em fase de desenvolvimento.
+
 ## Swagger e Documentação: :book:
 
-- Documentação Swagger disponível em: https://app.swaggerhub.com/apis-docs/FABIOTBRAGA_1/compass-mart_api/0.0.1
+:pen: Documentação Swagger disponível em: https://app.swaggerhub.com/apis-docs/FABIOTBRAGA_1/compass-mart_api/0.0.1
 
 # Developer::man_technologist:
 
