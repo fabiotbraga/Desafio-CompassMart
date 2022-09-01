@@ -1,11 +1,17 @@
 import { Types } from 'mongoose';
-export interface IUser {
-    email: string;
-    password: string;
+export interface IUser { 
+  email: string;
+  password: string;
 }
 
 export interface IUserResponse {
-  _id: Types.ObjectId;
-  email: string;
-  password: string;
+  id?: String;
+  email: String;
+  password: String;
+}
+
+export interface AuthenticateResponse {
+  id?: String;
+  email: String;
+  token?: String;
 }

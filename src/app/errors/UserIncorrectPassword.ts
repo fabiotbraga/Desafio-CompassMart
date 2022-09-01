@@ -1,11 +1,11 @@
-class UserNotFound {
+class UserIncorrectPassword {
   public readonly message: string;
   public readonly statusCode: number;
 
   constructor () {
-    this.message = 'User Not Found.';
+    this.message = 'password wrong.';
     this.statusCode = 404;
   }
 }
 
-export default UserNotFound;
+export default UserIncorrectPassword;
