@@ -11,7 +11,7 @@ const schema = new Schema<IProduct>({
   qtd_stock: { type: Number, required: true },
   barcodes: { type: String, unique: true, required: true },
   stock_control_enabled: {type: Boolean, default: false }
-}, { timestamps: { createdAt: 'created_at', updatedAt: 'updatedAt' } });
+}, { timestamps: { createdAt: 'created_at', updatedAt: 'updatedAt' }, versionKey: false });
 
 schema.plugin(paginate);
 const Product = mongoose.model<IProduct, mongoose.PaginateModel<IProduct>>('product', schema);

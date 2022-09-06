@@ -108,6 +108,13 @@ class ProductService {
     return result;
   }
 
+  async marketplace (id: ObjectId): Promise<any> {
+    const result = await ProductRepository.findById(id);
+    if (result == null) throw new IdProductExist();
+    const mapper = require('../mapper/mapper.json');
+    
+  }
+
   async lowStock (page: IProductPaginate): Promise<PaginateResult<IProductPaginate>> {
     return await ProductRepository.lowStock(page);
   }

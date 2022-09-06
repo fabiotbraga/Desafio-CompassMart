@@ -59,6 +59,16 @@ class ProductController {
     }
   }
 
+  async marketplace (req: Request, res: Response) {
+    try {
+      const id = new ObjectId(req.params.id);
+      const result = await ProductService.marketplace(id)
+      return res.status(200).json(result);
+    } catch (error) {
+      return res.status(500).json({ error });
+    }
+  }
+
   async update (req: Request, res: Response) {
     try {
       const id = new ObjectId(req.params.id);
