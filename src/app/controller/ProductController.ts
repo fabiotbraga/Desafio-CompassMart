@@ -4,12 +4,12 @@ const ObjectId = require('mongodb').ObjectId;
 class ProductController {
   async create(req: Request, res: Response) {
     try {
-      const { title, description, departament, brand, price, qtd_stock, barcodes } = req.body;
+      const { title, description, department, brand, price, qtd_stock, bar_codes } = req.body;
       if ( req.body.qtd_stock > 0) {
-        const result = await ProductService.create({ title, description, departament, brand, price, qtd_stock, barcodes, stock_control_enabled: true});
+        const result = await ProductService.create({ title, description, department, brand, price, qtd_stock, bar_codes, stock_control_enabled: true});
         return res.status(201).json(result);
       } else {
-        const result = await ProductService.create({ title, description, departament, brand, price, qtd_stock, barcodes, stock_control_enabled: false});
+        const result = await ProductService.create({ title, description, department, brand, price, qtd_stock, bar_codes, stock_control_enabled: false});
         return res.status(201).json(result);
       }
       
@@ -62,12 +62,12 @@ class ProductController {
   async update (req: Request, res: Response) {
     try {
       const id = new ObjectId(req.params.id);
-      const { title, description, departament, brand, price, qtd_stock } = req.body;
+      const { title, description, department, brand, price, qtd_stock } = req.body;
       if ( req.body.qtd_stock > 0) {
-        const result = await ProductService.updateProduct(id, { title, description, departament, brand, price, qtd_stock, stock_control_enabled: true});
+        const result = await ProductService.updateProduct(id, { title, description, department, brand, price, qtd_stock, stock_control_enabled: true});
         return res.status(201).json(result);
       } else {
-        const result = await ProductService.updateProduct(id, { title, description, departament, brand, price, qtd_stock, stock_control_enabled: false});
+        const result = await ProductService.updateProduct(id, { title, description, department, brand, price, qtd_stock, stock_control_enabled: false});
         return res.status(201).json(result);
       }
     } catch (error) {

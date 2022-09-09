@@ -8,7 +8,7 @@ import readline from 'readline';
 
 class ProductService {
   async create(payload: IProduct): Promise<IProductResponse> {
-    const findByBarcodes = await ProductRepository.findByBarcodes(payload.barcodes);
+    const findByBarcodes = await ProductRepository.findByBarcodes(payload.bar_codes);
     if (findByBarcodes) throw new BarcodesExist();
     const result = await ProductRepository.create(payload);
     return result;
@@ -29,11 +29,11 @@ class ProductService {
         products.push({
             title: productLineSplit[0],
             description: productLineSplit[1],
-            departament: productLineSplit[2],
+            department: productLineSplit[2],
             brand: productLineSplit[3],
             price: Number(productLineSplit[4]),
             qtd_stock: Number(productLineSplit[5]),
-            barcodes: productLineSplit[6],
+            bar_codes: productLineSplit[6],
             stock_control_enabled: true
         })
       }
@@ -43,7 +43,7 @@ class ProductService {
     
     for await (let product of products) {
       const errors: string[] = [];
-      const findByBarcodes = await ProductRepository.findByBarcodes(product.barcodes);
+      const findByBarcodes = await ProductRepository.findByBarcodes(product.bar_codes);
       //csv middlewares
       //title
       if (product.title == null) {
@@ -53,8 +53,8 @@ class ProductService {
       if (product.description == null) {
         errors.push('description field is null');
         }
-      //departament 
-      if (product.departament == null) {
+      //department 
+      if (product.department == null) {
         errors.push('departament field is null');
         }
       //brand 
@@ -75,20 +75,20 @@ class ProductService {
       if (product.qtd_stock < 1 || product.qtd_stock > 100000) {
         errors.push('qtd_stock must be between 1 and 100000');
         }
-      //barcodes 
-      if (product.barcodes == null) {
+      //bar_codes 
+      if (product.bar_codes == null) {
         errors.push('barcode field is null');
         } 
-      if (product.barcodes.length !== 13 ) {
+      if (product.bar_codes.length !== 13 ) {
         errors.push('Barcodes min digit 13');
         }
-      if ((isNaN(Number(product.barcodes))) ) {
+      if ((isNaN(Number(product.bar_codes))) ) {
         errors.push('Barcodes format invalid');
         } 
       if (findByBarcodes) {
         errors.push('Barcodes already exist.');
         } 
-      errors.length >= 1 ? errors_details.push({ title: product.title, barcodes: product.barcodes, errors})
+      errors.length >= 1 ? errors_details.push({ title: product.title, bar_codes: product.bar_codes, errors})
             : CountRegisteredProducts += 1; await ProductRepository.csv(product);
       }
     return {

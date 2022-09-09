@@ -12,7 +12,7 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     const schema = Joi.object({
       title: Joi.string().trim(),
       description: Joi.string().trim(),
-      departament: Joi.string().trim(),
+      department: Joi.string().trim(),
       brand: Joi.string().trim(),
       price: Joi.number().min(0.01).max(1000),
       qtd_stock: Joi.number().max(100000),
