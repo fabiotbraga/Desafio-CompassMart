@@ -5,6 +5,7 @@ import ProductRepository from '../repositories/ProductRepository';
 import { ObjectId, PaginateResult } from 'mongoose';
 import { Readable } from 'stream';
 import readline from 'readline';
+import mapper from '../mapper/mapper.json'
 
 class ProductService {
   async create(payload: IProduct): Promise<IProductResponse> {
@@ -111,7 +112,77 @@ class ProductService {
   async marketplace (id: ObjectId): Promise<any> {
     const result = await ProductRepository.findById(id);
     if (result == null) throw new IdProductExist();
-    const mapper = require('../mapper/mapper.json');
+
+    const mapperFields = mapper.fields
+    const productValues: Array<string> = []
+    const marketValues: Array<string> = []
+    const marketIdentifier: Array<string> = []
+    const type: Array<string> = []
+    const optional: Array<string> = []
+    const newProductformat = {}
+    
+    const productIdentifier = mapperFields.map(field => {
+      const { fieldProduct } = field
+      const productIdentify = fieldProduct.replace('product.', '')
+      return productIdentify
+    })
+
+    const marketFields = mapperFields.map(field => {
+      const { fieldMarket } = field
+      const marketField = fieldMarket.split('.')
+      return marketField
+    })
+
+    for (const value of mapperFields) {
+      productValues.push(Object.values(value)[0])
+      marketValues.push(Object.values(value)[1])
+      if (Object.keys(value)[2] === 'type') {
+        type.push(Object.values(value)[2])
+      } else {
+        type.push(Object.values(value)[3])
+      }
+      if (Object.keys(value)[2] === 'optional') {
+        optional.push(Object.values(value)[2])
+      }
+    }
+    
+    for (let index in marketFields) {
+      marketIdentifier.push(marketValues[index].split('.')[marketFields[index].length - 1])
+    }
+  
+    for (let index in productValues) {
+      if (type[index] === 'text') {
+        newProductformat[marketIdentifier[index]] = (result[productIdentifier[index]])?.toString()
+      } else if (type[index] === 'number') {
+        newProductformat[marketIdentifier[index]] = Number(result[productIdentifier[index]])
+      } else if (type[index] === 'boolean') {
+        newProductformat[marketIdentifier[index]] = Boolean(result[productIdentifier[index]])
+      } else if (type[index] === 'array') {
+        newProductformat[marketIdentifier[index]] = Array(result[productIdentifier[index]])
+      }
+      if (optional[index]) {
+        if (optional[index][0] === 'currency') {
+          //console.log('aqui')
+          
+        } else if (optional[index][0] === 'break') {
+          //
+        }
+      } 
+    }
+
+    function formatterProduct (marketFields: any) {
+      const productformatted = {}
+      for (const field of marketFields) {
+        let obj = productformatted
+        for (const salt of field) {
+          obj = obj[salt] = newProductformat[salt] = obj[salt] = newProductformat[salt] || {}
+        }
+      }
+      
+      return productformatted
+    }
+
+    return (formatterProduct(marketFields))
     
   }
 
