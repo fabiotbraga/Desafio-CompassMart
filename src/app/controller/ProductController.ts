@@ -1,6 +1,8 @@
 import ProductService from '../services/ProductService';
 import { Request, Response } from 'express';
 const ObjectId = require('mongodb').ObjectId;
+import { IdNotFoundError, ProductsNotFoundError, BarCodeExistsError }  from '../errors/productErrors'
+
 class ProductController {
   async create(req: Request, res: Response) {
     try {
@@ -13,8 +15,9 @@ class ProductController {
         return res.status(201).json(result);
       }
       
-    } catch (error) {
-      return res.status(500).json({ error });
+    } catch (Error) {
+      if (Error instanceof BarCodeExistsError) return res.status(Error.statusCode).json({ Error });
+      return res.status(500).json(Error);
     }
   }
 
@@ -34,8 +37,9 @@ class ProductController {
       const query = req.query;
       const result = await ProductService.findAll(query);
       return res.status(200).json(result);
-    } catch (error) {
-      return res.status(500).json({ error });
+    } catch (Error) {
+      if (Error instanceof ProductsNotFoundError) return res.status(Error.statusCode).json({ Error });
+      return res.status(500).json(Error);
     }
   }
  
@@ -54,8 +58,9 @@ class ProductController {
       const id = new ObjectId(req.params.id);
       const result = await ProductService.findById(id);
       return res.status(200).json(result);
-    } catch (error) {
-      return res.status(500).json({ error });
+    } catch (Error) {
+      if (Error instanceof IdNotFoundError) return res.status(Error.statusCode).json({ Error });
+      return res.status(500).json(Error);
     }
   }
 
@@ -65,13 +70,14 @@ class ProductController {
       const { title, description, department, brand, price, qtd_stock } = req.body;
       if ( req.body.qtd_stock > 0) {
         const result = await ProductService.updateProduct(id, { title, description, department, brand, price, qtd_stock, stock_control_enabled: true});
-        return res.status(201).json(result);
+        return res.status(200).json(result);
       } else {
         const result = await ProductService.updateProduct(id, { title, description, department, brand, price, qtd_stock, stock_control_enabled: false});
-        return res.status(201).json(result);
+        return res.status(200).json(result);
       }
-    } catch (error) {
-      return res.status(500).json({ error });
+    } catch (Error) {
+      if (Error instanceof IdNotFoundError) return res.status(Error.statusCode).json({ Error });
+      return res.status(500).json(Error);
     }
   }
 
@@ -80,8 +86,9 @@ class ProductController {
       const id = new ObjectId(req.params.id);
       await ProductService.delete(id);
       return res.status(204).json();
-    } catch (error) {
-      return res.status(500).json({ error });
+    } catch (Error) {
+      if (Error instanceof IdNotFoundError) return res.status(Error.statusCode).json({ Error });
+      return res.status(500).json(Error);
     }
   }
 }

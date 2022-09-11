@@ -2,8 +2,9 @@ import type { Config } from "@jest/types"
 
 const config: Config.InitialOptions = {
   preset: "ts-jest",
+  bail: true,
+  clearMocks: true,
   testEnvironment: "node",
   verbose: true,
-  automock: true,
 }
 export default config

@@ -1,15 +1,14 @@
-import BarcodesExist from '../errors/findBarcodeError';
-import IdProductExist from '../errors/idProductError';
 import { IProductResponse, IProduct, IProductUpdate, IProductResponseUpdate, IProductPaginate, IProductResponseCsv } from '../interfaces/IProduct';
 import ProductRepository from '../repositories/ProductRepository';
 import { ObjectId, PaginateResult } from 'mongoose';
 import { Readable } from 'stream';
 import readline from 'readline';
+import { IdNotFoundError, ProductsNotFoundError, BarCodeExistsError }  from '../errors/productErrors'
 
 class ProductService {
   async create(payload: IProduct): Promise<IProductResponse> {
     const findByBarcodes = await ProductRepository.findByBarcodes(payload.bar_codes);
-    if (findByBarcodes) throw new BarcodesExist();
+    if (findByBarcodes) throw new BarCodeExistsError();
     const result = await ProductRepository.create(payload);
     return result;
   }
@@ -99,12 +98,15 @@ class ProductService {
   }
 
   async findAll (query: IProductPaginate): Promise<PaginateResult<IProductPaginate>> {
-    return await ProductRepository.findAll(query);
+    const result = await ProductRepository.findAll(query);
+    if (result.totalDocs === 0) throw new ProductsNotFoundError()
+    return result
+
   }
   
   async findById (id: ObjectId): Promise<IProductResponse | null> {
     const result = await ProductRepository.findById(id);
-    if (result == null) throw new IdProductExist();
+    if (result === null) throw new IdNotFoundError();
     return result;
   }
 
@@ -114,13 +116,13 @@ class ProductService {
 
   async updateProduct (id: ObjectId, payload: IProductUpdate): Promise<IProductResponseUpdate|null> {
     const result = await ProductRepository.update(id, payload);
-    if (result == null) throw new IdProductExist();
+    if (result == null) throw new IdNotFoundError();
     return result;
   }
 
   async delete (id: ObjectId): Promise<IProductResponse | null> {
     const result = await ProductRepository.delete(id);
-    if (result == null) throw new IdProductExist();
+    if (result == null) throw new IdNotFoundError();
     return result;
   }
 }
