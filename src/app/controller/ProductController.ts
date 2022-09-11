@@ -1,7 +1,7 @@
 import ProductService from '../services/ProductService';
 import { Request, Response } from 'express';
 const ObjectId = require('mongodb').ObjectId;
-import { IdNotFoundError, ProductsNotFoundError, BarCodeExistsError }  from '../errors/productErrors'
+import { IdNotFoundError, ProductsNotFoundError, BarCodeExistsError, FileNotFoundError }  from '../errors/productErrors'
 
 class ProductController {
   async create(req: Request, res: Response) {
@@ -24,11 +24,13 @@ class ProductController {
   async csv(req: Request, res: Response) {
     try {
       const { file } = req;
-      const  buffer  = file?.buffer.toString("utf-8");;
+      const  buffer  = file?.buffer.toString("utf-8");
+      if (buffer === undefined) throw new FileNotFoundError();
       const result = await ProductService.csv(buffer!)
       return res.status(200).json(result); 
-    } catch (error) {
-      return res.status(500).json({ error });
+    } catch (Error) {
+      if (Error instanceof FileNotFoundError) return res.status(Error.statusCode).json({ Error });
+      return res.status(500).json(Error);
     }
   }
 
@@ -48,8 +50,9 @@ class ProductController {
       const page = req.query;
       const result = await ProductService.lowStock(page || 1);
       return res.status(200).json(result);
-    } catch (error) {
-      return res.status(500).json({ error });
+    } catch (Error) {
+      if (Error instanceof ProductsNotFoundError) return res.status(Error.statusCode).json({ Error });
+      return res.status(500).json(Error);
     }
   }
 

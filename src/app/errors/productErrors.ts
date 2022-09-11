@@ -15,6 +15,12 @@ export class ProductsNotFoundError extends ApiError {
 	}
 }
 
+export class FileNotFoundError extends ApiError {
+	constructor() {
+		super('File Not found', 404)
+	}
+}
+
 export class IdNotFoundError extends ApiError {
 	constructor() {
 		super('ID not found', 404)

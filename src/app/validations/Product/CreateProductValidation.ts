@@ -14,9 +14,14 @@ export default async (req: Request, res: Response, next: NextFunction) => {
     });
 
     const { error } = await schema.validate(req.body, { abortEarly: true });
-    if (error) throw error;
+    if (error) {
+      return res.status(400).json({
+        message: 'Validation Error',
+        description: error.details.map((description) => (description.message))
+      });
+    }
     return next();
-  } catch (error) {
-    return res.status(400).json(error);
+  } catch (Error) {
+    return res.status(400).json(Error);
   }
 };

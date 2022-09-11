@@ -111,7 +111,9 @@ class ProductService {
   }
 
   async lowStock (page: IProductPaginate): Promise<PaginateResult<IProductPaginate>> {
-    return await ProductRepository.lowStock(page);
+    const result = await ProductRepository.lowStock(page);
+    if (result.totalDocs === 0) throw new ProductsNotFoundError()
+    return result
   }
 
   async updateProduct (id: ObjectId, payload: IProductUpdate): Promise<IProductResponseUpdate|null> {
@@ -122,7 +124,7 @@ class ProductService {
 
   async delete (id: ObjectId): Promise<IProductResponse | null> {
     const result = await ProductRepository.delete(id);
-    if (result == null) throw new IdNotFoundError();
+    if (result === null) throw new IdNotFoundError();
     return result;
   }
 }
