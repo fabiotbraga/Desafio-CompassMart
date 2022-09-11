@@ -44,4 +44,3 @@ export class BadFormattedToken extends ApiError {
 		super('Bad Formatted Token', 401)
 	}
 }
-//bad formatted token

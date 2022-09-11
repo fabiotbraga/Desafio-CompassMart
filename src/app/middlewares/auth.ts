@@ -5,13 +5,13 @@ import { NoTokenProvided, TokenInvalid, BadFormattedToken} from '../errors/userE
 export default async (req: Request, res: Response, next: NextFunction) => {
   try {
     const authHeader = req.headers.authorization;
-    if (!authHeader) return res.status(401).send({ error: NoTokenProvided });
+    if (!authHeader) return res.status(401).send(new NoTokenProvided );
     const parts = authHeader.split(' ');
-    if (!(parts.length === 2)) return res.status(401).send({ error: TokenInvalid });
+    if (!(parts.length === 2)) return res.status(401).send(new TokenInvalid );
     const [scheme, token] = parts;
-    if (!/^Bearer$/i.test(scheme)) return res.status(401).send({ error: BadFormattedToken });
+    if (!/^Bearer$/i.test(scheme)) return res.status(401).send(new BadFormattedToken );
     jtw.verify(token, process.env.JWT_KEY, (error, decoded) => {
-      if (error) return res.status(401).send({ error: TokenInvalid });
+      if (error) return res.status(401).send(new TokenInvalid );
       return next();
     })
   } catch (error) {
