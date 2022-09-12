@@ -7,6 +7,7 @@ import FindByIdProductValidation from '../app/validations/product/FindByIdValida
 import deleteProductValidation from '../app/validationS/product/DeleteProductValidation';
 import authenticate from '../app/middlewares/auth'
 import multer from 'multer';
+import auth from '../app/middlewares/auth';
 
 const router = Router();
 const multerConfig = multer();
@@ -16,7 +17,7 @@ router.post(`${mainRoute}/csv`, authenticate, multerConfig.single("file"), Produ
 router.post(`${mainRoute}`, authenticate, ProductValidation, ProductController.create);
 router.patch(`${mainRoute}/:id`, authenticate, PatchUpdateProductValidation, ProductController.update);
 router.put(`${mainRoute}/:id`, authenticate, UpdateProductValidation, ProductController.update);
-router.get(`${mainRoute}/marketplace/:id`, FindByIdProductValidation, ProductController.marketplace);
+router.get(`${mainRoute}/marketplace/:id`, auth, FindByIdProductValidation, ProductController.marketplace);
 router.get(`${mainRoute}/low_stock`, authenticate, ProductController.lowStock);
 router.get(`${mainRoute}/:id`, authenticate, FindByIdProductValidation, ProductController.findById);
 router.get(`${mainRoute}`, authenticate, ProductController.findAll);

@@ -72,8 +72,9 @@ class ProductController {
       const id = new ObjectId(req.params.id);
       const result = await ProductService.marketplace(id)
       return res.status(200).json(result);
-    } catch (error) {
-      return res.status(500).json({ error });
+    } catch (Error) {
+      if (Error instanceof IdNotFoundError) return res.status(Error.statusCode).json({ Error });
+      return res.status(500).json(Error);
     }
   }
 
