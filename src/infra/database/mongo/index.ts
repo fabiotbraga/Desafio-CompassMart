@@ -4,7 +4,7 @@ import path from 'path';
 
 dotenv.config({
   path: process.env.NODE_ENV === 'test' 
-  ? path.resolve('.env.tests') 
+  ? path.resolve('.env.test') 
   : path.resolve('.env')
 })
 class Database {
