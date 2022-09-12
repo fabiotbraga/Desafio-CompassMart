@@ -140,6 +140,7 @@ class ProductService {
       marketValues.push(Object.values(value)[1])
       if (Object.keys(value)[2] === 'type') {
         type.push(Object.values(value)[2])
+        optional.push('0')
       } else {
         type.push(Object.values(value)[3])
       }
@@ -151,7 +152,6 @@ class ProductService {
     for (let index in marketFields) {
       marketIdentifier.push(marketValues[index].split('.')[marketFields[index].length - 1])
     }
-  
     for (let index in productValues) {
       if (type[index] === 'text') {
         newProductformat[marketIdentifier[index]] = (result[productIdentifier[index]])?.toString()
@@ -163,15 +163,17 @@ class ProductService {
         newProductformat[marketIdentifier[index]] = Array(result[productIdentifier[index]])
       }
       if (optional[index]) {
-        if (optional[index][0] === 'currency') {
-          //console.log('aqui')
-          
-        } else if (optional[index][0] === 'break') {
-          //
-        }
-      } 
+        const optionalObj = newProductformat[marketIdentifier[index]].toString()        
+        if (optional[index][0] ==='break') {
+          const salt = optional[index][1]
+          newProductformat[marketIdentifier[index]] = optionalObj.match(new RegExp('.{1,' + salt + '}', 'g'));
+        } else if (optional[index][0] ==='currency') {
+          let locale = optional[index][1]
+          let currency = optional[index][2]
+          newProductformat[marketIdentifier[index]] = Number(newProductformat[marketIdentifier[index]]).toLocaleString(locale, { style: 'currency', currency: currency })
+        } 
+      }
     }
-
     function formatterProduct (marketFields: any) {
       const productformatted = {}
       for (const field of marketFields) {
@@ -180,7 +182,6 @@ class ProductService {
           obj = obj[salt] = newProductformat[salt] = obj[salt] = newProductformat[salt] || {}
         }
       }
-      
       return productformatted
     }
 
