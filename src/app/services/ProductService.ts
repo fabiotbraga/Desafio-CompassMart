@@ -3,11 +3,8 @@ import ProductRepository from '../repositories/ProductRepository';
 import { ObjectId, PaginateResult } from 'mongoose';
 import { Readable } from 'stream';
 import readline from 'readline';
-<<<<<<< HEAD
-import mapper from '../mapper/mapper.json'
-=======
 import { IdNotFoundError, ProductsNotFoundError, BarCodeExistsError }  from '../errors/productErrors'
->>>>>>> development
+import mapper from '../mapper/mapper.json'
 
 class ProductService {
   async create(payload: IProduct): Promise<IProductResponse> {
@@ -116,7 +113,7 @@ class ProductService {
 
   async marketplace (id: ObjectId): Promise<any> {
     const result = await ProductRepository.findById(id);
-    if (result == null) throw new IdProductExist();
+    if (result == null) throw new IdNotFoundError();
 
     const mapperFields = mapper.fields
     const productValues: Array<string> = []
