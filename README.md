@@ -27,6 +27,8 @@ Projeto desenvolvido para o programa de bolsas Compass Uol. O projeto tem a segu
 
 ## Funcionalidades::wrench:
 
+#### Funcionalidades para Produto:
+
 :heavy_check_mark:Criação de um novo produto.
 
 ​	 :heavy_minus_sign:  Request - POST -`http://localhost:3000/api/v1/product`
@@ -59,6 +61,20 @@ Projeto desenvolvido para o programa de bolsas Compass Uol. O projeto tem a segu
 
 ​	:heavy_minus_sign: Request - POST - `http://localhost:3000/api/v1/product/csv`
 
+#### Funcionalidades de Usuário:
+
+:heavy_check_mark:Listar todos os usuários.
+
+:heavy_minus_sign:  Request - GET -`http://localhost:3000/api/v1/user`
+
+:heavy_check_mark:Criação de um novo usuário.
+
+:heavy_minus_sign:  Request - POST -`http://localhost:3000/api/v1/user`
+
+:heavy_check_mark:Login de usuário.
+
+:heavy_minus_sign:  Request - POST -`http://localhost:3000/api/v1/User/authenticate`
+
 ## Pré-requisitos/Dependências:books:
 
 :green_book: Cors
@@ -68,6 +84,10 @@ Projeto desenvolvido para o programa de bolsas Compass Uol. O projeto tem a segu
 :green_book: Eslint
 
 :green_book: Express
+
+:green_book: Faker
+
+:green_book: Jest
 
 :green_book: Joi
 
@@ -85,6 +105,8 @@ Projeto desenvolvido para o programa de bolsas Compass Uol. O projeto tem a segu
 
 :green_book: Prettier
 
+:green_book: SuperTest
+
 :green_book: Typescript
 
 ## Como rodar a aplicação::arrow_forward:
@@ -99,11 +121,15 @@ Projeto desenvolvido para o programa de bolsas Compass Uol. O projeto tem a segu
 
 ## Como rodar os testes::hammer_and_wrench:
 
-:warning: Testes estão em fase de desenvolvimento.
+:one: Crie um arquivo *.env*.test baseado no arquivo *.env.example.* contido no repositório. O arquivo deve conter as informações do seu banco de dados mongoDb. Caso não possua cria um em: https://www.mongodb.com/pt-br. Esse banco deve ser diferente do que está a aplicação e deve ser usado para os testes.
+
+:four: Rode o código no terminal: `npm run test`.
 
 ## Swagger e Documentação: :book:
 
-:pen: Documentação Swagger disponível em: https://app.swaggerhub.com/apis-docs/FABIOTBRAGA_1/compass-mart_api/0.0.1
+:pen: Documentação Swagger disponível em rota e pode ser aberta no navegador com o seguinte entereço:
+
+:pen: `http://localhost:3000/api/v1/api-docs`
 
 # Developer::man_technologist:
 
