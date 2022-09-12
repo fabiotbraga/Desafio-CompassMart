@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "dev": "nodemon src/server.ts --ignore __tests__",
+    "start": "node dist/server.js",
     "test": "jest"
   },
   "keywords": [],
