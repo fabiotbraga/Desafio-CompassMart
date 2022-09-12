@@ -61,6 +61,10 @@ Projeto desenvolvido para o programa de bolsas Compass Uol. O projeto tem a segu
 
 ​	:heavy_minus_sign: Request - POST - `http://localhost:3000/api/v1/product/csv`
 
+:heavy_check_mark:Retorno de um produto através de um mapper
+
+:heavy_minus_sign: Request - GET - `http://localhost:3000/api/v1/product/marketplace`
+
 #### Funcionalidades de Usuário:
 
 :heavy_check_mark:Listar todos os usuários.
