@@ -17,7 +17,7 @@ export class EmailExistsError extends ApiError {
 
 export class PasswordInvalid extends ApiError {
 	constructor() {
-		super('Password Invalid', 400)
+		super('Password Invalid', 401)
 	}
 }
 
@@ -36,11 +36,5 @@ export class NoTokenProvided extends ApiError {
 export class TokenInvalid extends ApiError {
 	constructor() {
 		super('Token Invalid', 401)
-	}
-}
-
-export class BadFormattedToken extends ApiError {
-	constructor() {
-		super('Bad Formatted Token', 401)
 	}
 }

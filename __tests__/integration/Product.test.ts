@@ -1,6 +1,12 @@
 import app from '../../src/app'
 import request from "supertest";
+import ProductSchema from '../../src/app/schemas/ProductSchema';
 jest.setTimeout(1000000);
+
+import {
+  connectDBForTesting,
+  disconnectDBForTesting,
+} from "../../config/mongoTestConfig";
 
 const Login = {
   email: 'emailtest@test.com',
@@ -26,7 +32,6 @@ const productExampleResponse = {
   qtd_stock: expect.any(Number), 
   stock_control_enabled: expect.any(Boolean),
   bar_codes: expect.any(String),
-  //createdAt: expect.any(String),
   updatedAt: expect.any(String)
 }
 
@@ -58,7 +63,15 @@ const PatchProductExample = {
   brand: 'Johnnie Walker',
 };
 
+
 describe("Product Routes", () => {
+  beforeAll(async () => {
+    await connectDBForTesting();
+  });
+  afterAll(async () => {
+    await ProductSchema.collection.drop();
+    await disconnectDBForTesting();
+  });
   describe("Create Product Route Tests", () => {
     test("(POST) => Should be able to create a new Product", async () => {
       await request(app).post('/api/v1/user').send(Login);
@@ -110,6 +123,12 @@ describe("Product Routes", () => {
       expect(response.statusCode).toBe(400);
       expect(response.body).toEqual(expect.objectContaining(JoiErrorExampleResponse))
     });
+
+    test("(POST) => Should not register product with invalid token", async () => {
+      const response = await request(app).post("/api/v1/product").send(ProductExample)
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
+    });
   });
   
   describe("Find All Products Route Tests", () => {
@@ -125,6 +144,12 @@ describe("Product Routes", () => {
       const login = await request(app).post('/api/v1/user/authenticate').send(Login);
       const response = await request(app).get('/api/v1/product').set('Authorization', `Bearer ${login.body.token}`);
       expect(response.statusCode).toBe(404);
+      expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
+    });
+
+    test('(GET) => Should not return if invalid token', async () => {
+      const response = await request(app).get('/api/v1/product');
+      expect(response.statusCode).toBe(401);
       expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
     });
   });
@@ -149,6 +174,12 @@ describe("Product Routes", () => {
       const login = await request(app).post('/api/v1/user/authenticate').send(Login);
       const response = await request(app).get("/api/v1/product/6307de214b468ecaa163a39e").set('Authorization', `Bearer ${login.body.token}`);
       expect(response.statusCode).toBe(404);
+      expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
+    });
+
+    test("(GET) => Should not be able to find an id if invalid token", async () => {
+      const response = await request(app).get(`/api/v1/product/id`)
+      expect(response.statusCode).toBe(401);
       expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
     });
   });
@@ -216,6 +247,13 @@ describe("Product Routes", () => {
       expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
     });
 
+    test("(PUT) => Should not be update to find an id if invalid token", async () => {
+      const response = await request(app).put(`/api/v1/product/6307de214b468ecaa163a39e`)
+      .send(PutProductExample);
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
+    });
+
   });
 
   describe("Update Product Route Tests (PATCH)", () => {
@@ -261,6 +299,13 @@ describe("Product Routes", () => {
       expect(response.statusCode).toBe(404);
       expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
     });
+
+    test("(PATCH) => Should not be update to find an id if invalid token", async () => {
+      const response = await request(app).patch(`/api/v1/product/6307de214b468ecaa163a39e`)
+      .send(PutProductExample);
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
+    });
   });
 
   describe("Delete Product Route Tests", () => {
@@ -284,6 +329,12 @@ describe("Product Routes", () => {
       expect(response.statusCode).toBe(404);
       expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
     });
+
+    test("(DELETE) => Should not be delete to find an id if invalid token", async () => {
+      const response = await request(app).delete(`/api/v1/product/6307de214b468ecaa163a39e`);
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
+    });
   });
 
   describe("Find Products Low Stock Route Tests", () => {
@@ -301,8 +352,14 @@ describe("Product Routes", () => {
       expect(response.statusCode).toBe(404);
       expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
     });
+
+    test('(GET) => Should not return if invalid token', async () => {
+      const response = await request(app).get("/api/v1/product/low_stock");
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
+    });
   });
-  /*
+
   describe("CSV Route Tests", () => {
     test("(POST) => Should be able to create new products using a CSV", async () => {
       const login = await request(app).post('/api/v1/user/authenticate').send(Login);
@@ -318,11 +375,14 @@ describe("Product Routes", () => {
         expect(response.statusCode).toBe(404);
         expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
     });
-    
+
+    describe("CSV Route Tests", () => {
+    test("(POST) => Should be able to create new products using a CSV", async () => {
+      const response = await request(app).post('/api/v1/product/csv')
+        .attach('file', '__tests__/docs_tests/lista_produtos_corrigida.csv');
+        expect(response.statusCode).toBe(401);
+        expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
+    });
   });
-  /*
-  describe("Mapper Route Tests", () => {
-  
   });
-  */
 });
