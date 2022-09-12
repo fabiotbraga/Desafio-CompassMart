@@ -1,0 +1,600 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "CompassMart - Api",
+    "description": "Project developed for the Compass Uol scholarship program. \nThe project has the following description:\n\n\"Compasso has entered a new branch of the market, CompassMart which is a\ndepartment store, where its focus is on food marketing. for this\nAPI it will be necessary to develop some routes.\"\n\nSome useful links:\n- [The CompassMart repository](https://github.com/fabiotbraga/Desafio-CompassMart)",
+    "version": "0.0.1",
+    "contact": {
+      "name": "fabiotbraga",
+      "email": "fabiotbraga@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "tags" : [ {
+    "name" : "Products"
+  }, {
+    "name" : "Users"
+  } ],
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/api/v1/product": {
+      "get": {
+        "summary": "List all products",
+        "tags": ["Products"],
+        "security" : [ { "bearerAuth" : [] }],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "departament",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search by department"
+          },
+          {
+            "in": "query",
+            "name": "brand",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Search by brand"
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "number"
+            },
+            "description": "Page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductGet"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Creation of a new product",
+        "tags": ["Products"],
+        "security" : [ { "bearerAuth" : [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductPost"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductPost"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/product/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "schema": {
+            "type": "string"
+          },
+          "required": true
+        }
+      ],
+      "get": {
+        "summary": "Find product by ID",
+        "tags": ["Products"],
+        "security" : [ { "bearerAuth" : [] }],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductGet"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ID format invalid"
+          },
+          "404": {
+            "description": "Id not found"
+          },
+          "500": {
+            "description": "Server internal error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update Product",
+        "tags": ["Products"],
+        "security" : [ { "bearerAuth" : [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductPutPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductPutPatch"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Id not found"
+          },
+          "500": {
+            "description": "Server internal error"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update Product",
+        "tags": ["Products"],
+        "security" : [ {"bearerAuth" : [] }],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductPutPatch"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductPutPatch"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Id not found"
+          },
+          "500": {
+            "description": "Server internal error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete product by ID",
+        "tags": ["Products"],
+        "security" : [ { "bearerAuth" : [] }],
+        "responses": {
+          "204": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "ID format invalid"
+          },
+          "404": {
+            "description": "Id not found"
+          },
+          "500": {
+            "description": "Server internal error"
+          }
+        }
+      }
+    },
+    "/api/v1/product/low_stock": {
+      "get": {
+        "summary": "List all products with Low Stock",
+        "tags": ["Products"],
+        "security" : [ { "bearerAuth" : [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string",
+                      "format": "Types.ObjectId"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "departament": {
+                      "type": "string"
+                    },
+                    "brand": {
+                      "type": "string"
+                    },
+                    "price": {
+                      "type": "number"
+                    },
+                    "qtd_stock": {
+                      "type": "number"
+                    },
+                    "barcodes": {
+                      "type": "string"
+                    },
+                    "stock_control_enabled": {
+                      "type": "boolean"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/product/csv": {
+      "post": {
+        "summary": "Creation of a new product with csv file",
+        "tags": ["Products"],
+        "security" : [ { "bearerAuth" : [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/product/marketplace/{id}" : {
+      "parameters" : [ {
+        "name" : "id",
+        "in" : "path",
+        "schema" : {
+          "type" : "string"
+        },
+        "required" : true
+      } ],
+      "get" : {
+        "summary" : "Mapper product",
+        "tags" : [ "Products" ],
+        "security" : [{ "bearerAuth" : []} ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Product Not found."
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/user" : {
+      "get" : {
+        "summary" : "Search all users",
+        "tags" : [ "Users" ],
+        "responses" : {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref" : "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Users not found"
+          },
+          "500" : {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Create User",
+        "tags" : [ "Users" ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref": "#/components/schemas/UserPost"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UserPost"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "This email is already in use."
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/v1/user/authenticate" : {
+      "post" : {
+        "summary" : "Login",
+        "tags" : [ "Users" ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref": "#/components/schemas/ProductPost"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref": "#/components/schemas/ProductPost"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Invalid password."
+          },
+          "404" : {
+            "description" : "User not found."
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ProductGet": {
+        "description": "Response template for get route",
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "format": "Types.ObjectId"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "departament": {
+            "type": "string"
+          },
+          "brand": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "qtd_stock": {
+            "type": "number"
+          },
+          "barcodes": {
+            "type": "string"
+          },
+          "stock_control_enabled": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ProductPost": {
+        "description": "Template for post route",
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "departament": {
+            "type": "string"
+          },
+          "brand": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "qtd_stock": {
+            "type": "number"
+          },
+          "barcodes": {
+            "type": "string"
+          }
+        }
+      },
+      "ProductPutPatch": {
+        "description": "Template for put and patch route",
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "departament": {
+            "type": "string"
+          },
+          "brand": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "qtd_stock": {
+            "type": "number"
+          }
+        }
+      },
+      "User" : {
+        "type" : "object",
+        "description": "Response template for Get User route",
+        "properties" : {
+          "_id": {
+            "type": "string",
+            "format": "Types.ObjectId"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          }
+        }
+      },
+      "UserPost" : {
+        "type" : "object",
+        "description": "Response template for Post User route",
+        "required" : [ "email", "password" ],
+        "properties" : {
+          "email" : {
+            "type" : "string"
+          },
+          "password" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "bearerAuth" : {
+        "type" : "http",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    }
+  }
+}

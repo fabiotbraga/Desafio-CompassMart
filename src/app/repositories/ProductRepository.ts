@@ -13,14 +13,14 @@ class ProductRepository {
   }
 
   async findByBarcodes (value: string): Promise<Boolean> {
-    const result = await ProductSchema.findOne({ barcodes: value });
+    const result = await ProductSchema.findOne({ bar_codes: value });
     if (result) return true;
     return false;
   }
 
   async findAll (query: IProductPaginate): Promise<PaginateResult<IProductPaginate>> {
     const queryall = {
-      departament: { $regex: query.departament || ''},
+      department: { $regex: query.department || ''},
       brand: { $regex: query.brand || ''},
       stock_control_enabled: true
     }

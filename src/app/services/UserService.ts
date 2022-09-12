@@ -1,8 +1,6 @@
 import { IUserResponse, IUser, AuthenticateResponse } from '../interfaces/IUser';
 import UserRepository from '../repositories/UserRepository';
-import PasswordInvalid from '../errors/PasswordNotFound';
-import UserEmailExists from '../errors/UserEmailExists';
-import  UserNotFound from '../errors/UserNotFound';
+import { EmailExistsError,  PasswordInvalid, UserNotFound } from '../errors/userErrors';
 import { ObjectId } from 'mongoose';
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -10,7 +8,7 @@ const bcrypt = require('bcrypt');
 class UserService {
   async create (payload: IUser): Promise<AuthenticateResponse> {
     const verify = await UserRepository.verifyEmail(payload.email);
-    if (verify !== null) throw new UserEmailExists();
+    if (verify !== null) throw new EmailExistsError();
     payload.password = await bcrypt.hash(payload.password, Number(process.env.SALT));
     const payloadUser = await UserRepository.create(payload);
     const result = {
@@ -34,22 +32,6 @@ class UserService {
 
   async findAll (): Promise<IUserResponse[]> {
     return await UserRepository.findAll();
-  }
-  
-  async findById (id: ObjectId): Promise<IUserResponse | null> {
-    const result = await UserRepository.findById(id);
-    return result;
-  }
-
- 
-  async updateUser (id: ObjectId, payload: IUser): Promise<IUserResponse|null> {
-    const result = await UserRepository.update(id, payload);
-    return result;
-  }
-
-  async delete (id: ObjectId): Promise<IUserResponse | null> {
-    const result = await UserRepository.delete(id);
-    return result;
   }
 }
 
