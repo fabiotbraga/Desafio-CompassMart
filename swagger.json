@@ -324,6 +324,54 @@
         }
       }
     },
+    "/api/v1/product/marketplace/{id}" : {
+      "parameters" : [ {
+        "name" : "id",
+        "in" : "path",
+        "schema" : {
+          "type" : "string"
+        },
+        "required" : true
+      } ],
+      "get" : {
+        "summary" : "Mapper product",
+        "tags" : [ "Products" ],
+        "security" : [{ "bearerAuth" : []} ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Product Not found."
+          },
+          "500" : {
+            "description" : "Internal Server Error"
+          }
+        }
+      }
+    },
     "/api/v1/user" : {
       "get" : {
         "summary" : "Search all users",

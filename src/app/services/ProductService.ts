@@ -4,6 +4,7 @@ import { ObjectId, PaginateResult } from 'mongoose';
 import { Readable } from 'stream';
 import readline from 'readline';
 import { IdNotFoundError, ProductsNotFoundError, BarCodeExistsError }  from '../errors/productErrors'
+import mapper from '../mapper/mapper.json'
 
 class ProductService {
   async create(payload: IProduct): Promise<IProductResponse> {
@@ -108,6 +109,84 @@ class ProductService {
     const result = await ProductRepository.findById(id);
     if (result === null) throw new IdNotFoundError();
     return result;
+  }
+
+  async marketplace (id: ObjectId): Promise<any> {
+    const result = await ProductRepository.findById(id);
+    if (result == null) throw new IdNotFoundError();
+
+    const mapperFields = mapper.fields
+    const productValues: Array<string> = []
+    const marketValues: Array<string> = []
+    const marketIdentifier: Array<string> = []
+    const type: Array<string> = []
+    const optional: Array<string> = []
+    const newProductformat = {}
+    
+    const productIdentifier = mapperFields.map(field => {
+      const { fieldProduct } = field
+      const productIdentify = fieldProduct.replace('product.', '')
+      return productIdentify
+    })
+
+    const marketFields = mapperFields.map(field => {
+      const { fieldMarket } = field
+      const marketField = fieldMarket.split('.')
+      return marketField
+    })
+
+    for (const value of mapperFields) {
+      productValues.push(Object.values(value)[0])
+      marketValues.push(Object.values(value)[1])
+      if (Object.keys(value)[2] === 'type') {
+        type.push(Object.values(value)[2])
+        optional.push('0')
+      } else {
+        type.push(Object.values(value)[3])
+      }
+      if (Object.keys(value)[2] === 'optional') {
+        optional.push(Object.values(value)[2])
+      }
+    }
+    
+    for (let index in marketFields) {
+      marketIdentifier.push(marketValues[index].split('.')[marketFields[index].length - 1])
+    }
+    for (let index in productValues) {
+      if (type[index] === 'text') {
+        newProductformat[marketIdentifier[index]] = (result[productIdentifier[index]])?.toString()
+      } else if (type[index] === 'number') {
+        newProductformat[marketIdentifier[index]] = Number(result[productIdentifier[index]])
+      } else if (type[index] === 'boolean') {
+        newProductformat[marketIdentifier[index]] = Boolean(result[productIdentifier[index]])
+      } else if (type[index] === 'array') {
+        newProductformat[marketIdentifier[index]] = Array(result[productIdentifier[index]])
+      }
+      if (optional[index]) {
+        const optionalObj = newProductformat[marketIdentifier[index]].toString()        
+        if (optional[index][0] ==='break') {
+          const salt = optional[index][1]
+          newProductformat[marketIdentifier[index]] = optionalObj.match(new RegExp('.{1,' + salt + '}', 'g'));
+        } else if (optional[index][0] ==='currency') {
+          let locale = optional[index][1]
+          let currency = optional[index][2]
+          newProductformat[marketIdentifier[index]] = Number(newProductformat[marketIdentifier[index]]).toLocaleString(locale, { style: 'currency', currency: currency })
+        } 
+      }
+    }
+    function formatterProduct (marketFields: any) {
+      const productformatted = {}
+      for (const field of marketFields) {
+        let obj = productformatted
+        for (const salt of field) {
+          obj = obj[salt] = newProductformat[salt] = obj[salt] = newProductformat[salt] || {}
+        }
+      }
+      return productformatted
+    }
+
+    return (formatterProduct(marketFields))
+    
   }
 
   async lowStock (page: IProductPaginate): Promise<PaginateResult<IProductPaginate>> {

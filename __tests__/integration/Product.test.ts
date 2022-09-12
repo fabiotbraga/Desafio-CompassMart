@@ -384,5 +384,28 @@ describe("Product Routes", () => {
         expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
     });
   });
+  describe('Mapper Route', () => {
+    test('Should mapper product', async () => {
+      const login = await request(app).post('/api/v1/user/authenticate').send(Login);
+      const createProduct = await request(app).post("/api/v1/product").send(ProductExample).set('Authorization', `Bearer ${login.body.token}`);
+      const response = await request(app).get(`/api/v1/product/marketplace/${createProduct.body._id}`).set('Authorization', `Bearer ${login.body.token}`);
+      await request(app).delete(`/api/v1/product/${createProduct.body._id}`).set('Authorization', `Bearer ${login.body.token}`);
+      expect(response.statusCode).toBe(200);
+    });
+  
+  
+    test('Should not mapper product with invalid token', async () => {
+      const response = await request(app).get('/api/v1/product/marketplace/')
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
+    });
+  
+    test('Should not mapper product if product not found', async () => {
+      const login = await request(app).post('/api/v1/user/authenticate').send(Login);
+      const response = await request(app).get(`/api/v1/product/6307de214b468ecaa163a39e`).set('Authorization', `Bearer ${login.body.token}`);
+      expect(response.statusCode).toBe(404);
+      expect(response.body).toEqual(expect.objectContaining(ErrorExampleResponse))
+    });
+  });
   });
 });
