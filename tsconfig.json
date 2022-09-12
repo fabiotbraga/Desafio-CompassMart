@@ -11,9 +11,11 @@
     "strictNullChecks": true,
     "outDir": "./dist",
     "target": "es6",
+    "types" : [ "node" , "jest" ] ,
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+     "**/*.test.*" , "**/__mocks__/*" , "**/__tests__/*" 
   ],
   "include": [
     "./src/**/*"

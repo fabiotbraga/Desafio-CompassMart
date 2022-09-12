@@ -1,14 +1,15 @@
 import { Types } from 'mongoose';
 import { Request, Response, NextFunction } from 'express';
-import IdProductInvalid from '../../errors/idProductInvalid';
+import { IdInvalidError } from '../../errors/productErrors';
 
 export default async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = req.params.id;
     const isValid = Types.ObjectId.isValid(id);
-    if (!isValid) throw new IdProductInvalid();
+    if (!isValid) throw new IdInvalidError();
     return next();
-  } catch (error) {
-    return res.status(404).json(error);
+  } catch (Error) {
+    if (Error instanceof IdInvalidError) return res.status(Error.statusCode).json({ Error });
+    return res.status(400).json(Error);
   }
 };

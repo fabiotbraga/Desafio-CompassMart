@@ -1,16 +1,18 @@
-import BarcodesExist from '../errors/findBarcodeError';
-import IdProductExist from '../errors/idProductError';
 import { IProductResponse, IProduct, IProductUpdate, IProductResponseUpdate, IProductPaginate, IProductResponseCsv } from '../interfaces/IProduct';
 import ProductRepository from '../repositories/ProductRepository';
 import { ObjectId, PaginateResult } from 'mongoose';
 import { Readable } from 'stream';
 import readline from 'readline';
+<<<<<<< HEAD
 import mapper from '../mapper/mapper.json'
+=======
+import { IdNotFoundError, ProductsNotFoundError, BarCodeExistsError }  from '../errors/productErrors'
+>>>>>>> development
 
 class ProductService {
   async create(payload: IProduct): Promise<IProductResponse> {
-    const findByBarcodes = await ProductRepository.findByBarcodes(payload.barcodes);
-    if (findByBarcodes) throw new BarcodesExist();
+    const findByBarcodes = await ProductRepository.findByBarcodes(payload.bar_codes);
+    if (findByBarcodes) throw new BarCodeExistsError();
     const result = await ProductRepository.create(payload);
     return result;
   }
@@ -30,11 +32,11 @@ class ProductService {
         products.push({
             title: productLineSplit[0],
             description: productLineSplit[1],
-            departament: productLineSplit[2],
+            department: productLineSplit[2],
             brand: productLineSplit[3],
             price: Number(productLineSplit[4]),
             qtd_stock: Number(productLineSplit[5]),
-            barcodes: productLineSplit[6],
+            bar_codes: productLineSplit[6],
             stock_control_enabled: true
         })
       }
@@ -44,7 +46,7 @@ class ProductService {
     
     for await (let product of products) {
       const errors: string[] = [];
-      const findByBarcodes = await ProductRepository.findByBarcodes(product.barcodes);
+      const findByBarcodes = await ProductRepository.findByBarcodes(product.bar_codes);
       //csv middlewares
       //title
       if (product.title == null) {
@@ -54,8 +56,8 @@ class ProductService {
       if (product.description == null) {
         errors.push('description field is null');
         }
-      //departament 
-      if (product.departament == null) {
+      //department 
+      if (product.department == null) {
         errors.push('departament field is null');
         }
       //brand 
@@ -76,20 +78,20 @@ class ProductService {
       if (product.qtd_stock < 1 || product.qtd_stock > 100000) {
         errors.push('qtd_stock must be between 1 and 100000');
         }
-      //barcodes 
-      if (product.barcodes == null) {
+      //bar_codes 
+      if (product.bar_codes == null) {
         errors.push('barcode field is null');
         } 
-      if (product.barcodes.length !== 13 ) {
+      if (product.bar_codes.length !== 13 ) {
         errors.push('Barcodes min digit 13');
         }
-      if ((isNaN(Number(product.barcodes))) ) {
+      if ((isNaN(Number(product.bar_codes))) ) {
         errors.push('Barcodes format invalid');
         } 
       if (findByBarcodes) {
         errors.push('Barcodes already exist.');
         } 
-      errors.length >= 1 ? errors_details.push({ title: product.title, barcodes: product.barcodes, errors})
+      errors.length >= 1 ? errors_details.push({ title: product.title, bar_codes: product.bar_codes, errors})
             : CountRegisteredProducts += 1; await ProductRepository.csv(product);
       }
     return {
@@ -100,12 +102,15 @@ class ProductService {
   }
 
   async findAll (query: IProductPaginate): Promise<PaginateResult<IProductPaginate>> {
-    return await ProductRepository.findAll(query);
+    const result = await ProductRepository.findAll(query);
+    if (result.totalDocs === 0) throw new ProductsNotFoundError()
+    return result
+
   }
   
   async findById (id: ObjectId): Promise<IProductResponse | null> {
     const result = await ProductRepository.findById(id);
-    if (result == null) throw new IdProductExist();
+    if (result === null) throw new IdNotFoundError();
     return result;
   }
 
@@ -187,18 +192,20 @@ class ProductService {
   }
 
   async lowStock (page: IProductPaginate): Promise<PaginateResult<IProductPaginate>> {
-    return await ProductRepository.lowStock(page);
+    const result = await ProductRepository.lowStock(page);
+    if (result.totalDocs === 0) throw new ProductsNotFoundError()
+    return result
   }
 
   async updateProduct (id: ObjectId, payload: IProductUpdate): Promise<IProductResponseUpdate|null> {
     const result = await ProductRepository.update(id, payload);
-    if (result == null) throw new IdProductExist();
+    if (result == null) throw new IdNotFoundError();
     return result;
   }
 
   async delete (id: ObjectId): Promise<IProductResponse | null> {
     const result = await ProductRepository.delete(id);
-    if (result == null) throw new IdProductExist();
+    if (result === null) throw new IdNotFoundError();
     return result;
   }
 }
