@@ -10,6 +10,7 @@ module.exports = {
     sourceType: "module",
   },
   plugins: ["@typescript-eslint", "prettier"],
+  ignorePatterns: ["__tests__/**", "dist/**"],
   rules: {
     "prettier/prettier": "error",
   },
