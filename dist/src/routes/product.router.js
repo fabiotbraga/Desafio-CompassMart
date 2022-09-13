@@ -5,11 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const ProductController_1 = __importDefault(require("../app/controller/ProductController"));
-const CreateProductValidation_1 = __importDefault(require("../app/validations/product/CreateProductValidation"));
-const UpdateProductValidation_1 = __importDefault(require("../app/validations/product/UpdateProductValidation"));
-const PatchUpdateProductValidation_1 = __importDefault(require("../app/validations/product/PatchUpdateProductValidation"));
-const FindByIdValidation_1 = __importDefault(require("../app/validations/product/FindByIdValidation"));
-const DeleteProductValidation_1 = __importDefault(require("../app/validationS/product/DeleteProductValidation"));
+const CreateProductValidation_1 = __importDefault(require("../app/validations/Product/CreateProductValidation"));
+const UpdateProductValidation_1 = __importDefault(require("../app/validations/Product/UpdateProductValidation"));
+const PatchUpdateProductValidation_1 = __importDefault(require("../app/validations/Product/PatchUpdateProductValidation"));
+const FindByIdValidation_1 = __importDefault(require("../app/validations/Product/FindByIdValidation"));
+const DeleteProductValidation_1 = __importDefault(require("../app/validations/Product/DeleteProductValidation"));
 const auth_1 = __importDefault(require("../app/middlewares/auth"));
 const multer_1 = __importDefault(require("multer"));
 const auth_2 = __importDefault(require("../app/middlewares/auth"));

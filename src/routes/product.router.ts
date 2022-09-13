@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import ProductController from '../app/controller/ProductController';
-import ProductValidation from '../app/validations/product/CreateProductValidation';
-import UpdateProductValidation from '../app/validations/product/UpdateProductValidation';
-import PatchUpdateProductValidation from '../app/validations/product/PatchUpdateProductValidation';
-import FindByIdProductValidation from '../app/validations/product/FindByIdValidation';
-import deleteProductValidation from '../app/validationS/product/DeleteProductValidation';
+import ProductValidation from '../app/validations/Product/CreateProductValidation'
+import UpdateProductValidation from '../app/validations/Product/UpdateProductValidation';
+import PatchUpdateProductValidation from '../app/validations/Product/PatchUpdateProductValidation';
+import FindByIdProductValidation from '../app/validations/Product/FindByIdValidation';
+import deleteProductValidation from '../app/validationS/Product/DeleteProductValidation';
 import authenticate from '../app/middlewares/auth'
 import multer from 'multer';
 import auth from '../app/middlewares/auth';
