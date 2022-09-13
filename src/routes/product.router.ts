@@ -4,7 +4,7 @@ import ProductValidation from '../app/validations/Product/CreateProductValidatio
 import UpdateProductValidation from '../app/validations/Product/UpdateProductValidation';
 import PatchUpdateProductValidation from '../app/validations/Product/PatchUpdateProductValidation';
 import FindByIdProductValidation from '../app/validations/Product/FindByIdValidation';
-import deleteProductValidation from '../app/validationS/Product/DeleteProductValidation';
+import deleteProductValidation from '../app/validations/Product/DeleteProductValidation';
 import authenticate from '../app/middlewares/auth'
 import multer from 'multer';
 import auth from '../app/middlewares/auth';
