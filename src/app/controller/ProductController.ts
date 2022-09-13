@@ -58,6 +58,7 @@ class ProductController {
       const { file } = req;
       const buffer = file?.buffer.toString("utf-8");
       if (buffer === undefined) throw new FileNotFoundError();
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const result = await ProductService.csv(buffer!);
       return res.status(200).json(result);
     } catch (Error) {
