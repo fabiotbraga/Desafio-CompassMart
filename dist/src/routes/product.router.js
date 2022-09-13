@@ -1,0 +1,28 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const ProductController_1 = __importDefault(require("../app/controller/ProductController"));
+const CreateProductValidation_1 = __importDefault(require("../app/validations/product/CreateProductValidation"));
+const UpdateProductValidation_1 = __importDefault(require("../app/validations/product/UpdateProductValidation"));
+const PatchUpdateProductValidation_1 = __importDefault(require("../app/validations/product/PatchUpdateProductValidation"));
+const FindByIdValidation_1 = __importDefault(require("../app/validations/product/FindByIdValidation"));
+const DeleteProductValidation_1 = __importDefault(require("../app/validationS/product/DeleteProductValidation"));
+const auth_1 = __importDefault(require("../app/middlewares/auth"));
+const multer_1 = __importDefault(require("multer"));
+const auth_2 = __importDefault(require("../app/middlewares/auth"));
+const router = (0, express_1.Router)();
+const multerConfig = (0, multer_1.default)();
+const mainRoute = '/api/v1/product';
+router.post(`${mainRoute}/csv`, auth_1.default, multerConfig.single("file"), ProductController_1.default.csv);
+router.post(`${mainRoute}`, auth_1.default, CreateProductValidation_1.default, ProductController_1.default.create);
+router.patch(`${mainRoute}/:id`, auth_1.default, PatchUpdateProductValidation_1.default, ProductController_1.default.update);
+router.put(`${mainRoute}/:id`, auth_1.default, UpdateProductValidation_1.default, ProductController_1.default.update);
+router.get(`${mainRoute}/marketplace/:id`, auth_2.default, FindByIdValidation_1.default, ProductController_1.default.marketplace);
+router.get(`${mainRoute}/low_stock`, auth_1.default, ProductController_1.default.lowStock);
+router.get(`${mainRoute}/:id`, auth_1.default, FindByIdValidation_1.default, ProductController_1.default.findById);
+router.get(`${mainRoute}`, auth_1.default, ProductController_1.default.findAll);
+router.delete(`${mainRoute}/:id`, auth_1.default, DeleteProductValidation_1.default, ProductController_1.default.delete);
+exports.default = router;
