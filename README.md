@@ -135,6 +135,10 @@ Projeto desenvolvido para o programa de bolsas Compass Uol. O projeto tem a segu
 
 :pen: `http://localhost:3000/api/v1/api-docs`
 
+### Deploy no Heroku:
+
+- https://compassmartdeploy.herokuapp.com/
+
 # Developer::man_technologist:
 
 | [<img src="https://avatars.githubusercontent.com/u/86860928?s=400&u=3a60af35e718b5627adfb0b572e2d40a813275e9&v=4" width=115 > <br> <sub> Fábio Teixeira </sub>](https://github.com/fabiotbraga) |
