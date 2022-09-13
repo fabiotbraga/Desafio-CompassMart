@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "nodemon src/server.ts --ignore __tests__",
-    "start": "node dist/server.js",
+    "start": "ts-node src/server.ts",
     "test": "jest"
   },
   "keywords": [],
