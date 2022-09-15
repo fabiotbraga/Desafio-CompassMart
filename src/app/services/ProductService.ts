@@ -133,6 +133,7 @@ class ProductService {
     return result;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async marketplace(id: ObjectId): Promise<any> {
     const result = await ProductRepository.findById(id);
     if (result == null) throw new IdNotFoundError();
@@ -210,6 +211,7 @@ class ProductService {
         }
       }
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     function formatterProduct(marketFields: any) {
       const productformatted = {};
       for (const field of marketFields) {

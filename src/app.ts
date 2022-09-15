@@ -4,7 +4,7 @@ import routes from "./routes/index.router";
 import "./infra/database/mongo/index";
 import "dotenv/config";
 import swaggerUI from "swagger-ui-express";
-import swaggerDocs from "../swagger.json";
+import swaggerDocs from "../docs/swagger.json";
 import morganMiddleware from "./logger/morgan";
 
 class App {
