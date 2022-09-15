@@ -18,11 +18,13 @@
   }, {
     "name" : "Users"
   } ],
-  "servers": [
-    {
-      "url": "http://localhost:3000"
-    }
-  ],
+  "servers" : [ {
+    "url" : "http://localhost:3000/",
+    "description" : "Development"
+  }, {
+    "url" : "https://compassmartdeploy.herokuapp.com/",
+    "description" : "Deploy"
+  } ],
   "paths": {
     "/api/v1/product": {
       "get": {
