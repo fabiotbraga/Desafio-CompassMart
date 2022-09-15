@@ -22,7 +22,7 @@
     "url" : "http://localhost:3000/",
     "description" : "Development"
   }, {
-    "url" : "https://compassmartdeploy.herokuapp.com/api/v1/",
+    "url" : "https://compassmartdeploy.herokuapp.com",
     "description" : "Deploy"
   } ],
   "paths": {
