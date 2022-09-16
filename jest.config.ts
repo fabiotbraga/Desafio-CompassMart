@@ -5,6 +5,25 @@ const config: Config.InitialOptions = {
   bail: true,
   clearMocks: true,
   testEnvironment: "node",
-  verbose: true
+  verbose: true,
+  collectCoverage: true,
+  coverageDirectory: "__tests__/coverage",
+  collectCoverageFrom: [
+    "src/**",
+    "!src/server.ts",
+    "!src/app/utils/**",
+    "!src/docs/**",
+    "!src/config/**",
+    "!src/errors/**",
+    "!src/app/mapper/**",
+    "!src/logger/**",
+    "!src/infra/**"
+  ],
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "__tests__/coverage/",
+    "src/setup.ts"
+  ]
 };
+
 export default config;
