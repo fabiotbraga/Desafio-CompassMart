@@ -10,15 +10,11 @@ import multer from "multer";
 import auth from "../app/middlewares/auth";
 
 const router = Router();
-const multerConfig = multer();
+const multerConfig = multer({ limits: { fileSize: 15000 } });
+const upload = multerConfig.single("file");
 const mainRoute = "/api/v1/product";
 
-router.post(
-  `${mainRoute}/csv`,
-  authenticate,
-  multerConfig.single("file"),
-  ProductController.csv
-);
+router.post(`${mainRoute}/csv`, authenticate, upload, ProductController.csv);
 router.post(
   `${mainRoute}`,
   authenticate,
