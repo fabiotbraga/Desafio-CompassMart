@@ -12,9 +12,7 @@ const config: Config.InitialOptions = {
     "src/**",
     "!src/server.ts",
     "!src/app/utils/**",
-    "!src/docs/**",
     "!src/config/**",
-    "!src/errors/**",
     "!src/app/mapper/**",
     "!src/logger/**",
     "!src/infra/**"
