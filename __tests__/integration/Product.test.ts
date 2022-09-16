@@ -63,14 +63,15 @@ const PatchProductExample = {
   brand: "Johnnie Walker"
 };
 
+beforeAll(async () => {
+  await connectDBForTesting();
+});
+afterAll(async () => {
+  await ProductSchema.collection.drop();
+  await disconnectDBForTesting();
+});
+
 describe("Product Routes", () => {
-  beforeAll(async () => {
-    await connectDBForTesting();
-  });
-  afterAll(async () => {
-    await ProductSchema.collection.drop();
-    await disconnectDBForTesting();
-  });
   describe("Create Product Route Tests", () => {
     test("(POST) => Should be able to create a new Product", async () => {
       await request(app).post("/api/v1/user").send(Login);
@@ -160,10 +161,21 @@ describe("Product Routes", () => {
       );
     });
 
-    test("(POST) => Should not register product with invalid token", async () => {
+    test("(POST) => Should not register product with token empty", async () => {
       const response = await request(app)
         .post("/api/v1/product")
         .send(ProductExample);
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual(
+        expect.objectContaining(ErrorExampleResponse)
+      );
+    });
+
+    test("(POST) => Should not register product with token invalid", async () => {
+      const response = await request(app)
+        .post("/api/v1/product")
+        .send(ProductExample)
+        .set("Authorization", `Bearer invalid.token`);
       expect(response.statusCode).toBe(401);
       expect(response.body).toEqual(
         expect.objectContaining(ErrorExampleResponse)
@@ -202,8 +214,18 @@ describe("Product Routes", () => {
       );
     });
 
-    test("(GET) => Should not return if invalid token", async () => {
+    test("(GET) => Should not return if token is empty", async () => {
       const response = await request(app).get("/api/v1/product");
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual(
+        expect.objectContaining(ErrorExampleResponse)
+      );
+    });
+
+    test("(GET) => hould not return if token invalid", async () => {
+      const response = await request(app)
+        .get(`/api/v1/product/id`)
+        .set("Authorization", `Bearer invalid.token`);
       expect(response.statusCode).toBe(401);
       expect(response.body).toEqual(
         expect.objectContaining(ErrorExampleResponse)
@@ -255,8 +277,18 @@ describe("Product Routes", () => {
       );
     });
 
-    test("(GET) => Should not be able to find an id if invalid token", async () => {
+    test("(GET) => Should not be able to find an id if token is empty", async () => {
       const response = await request(app).get(`/api/v1/product/id`);
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual(
+        expect.objectContaining(ErrorExampleResponse)
+      );
+    });
+
+    test("(GET) => Should not be able to find an id if token invalid", async () => {
+      const response = await request(app)
+        .get(`/api/v1/product/id`)
+        .set("Authorization", `Bearer invalid.token`);
       expect(response.statusCode).toBe(401);
       expect(response.body).toEqual(
         expect.objectContaining(ErrorExampleResponse)
@@ -367,10 +399,21 @@ describe("Product Routes", () => {
       );
     });
 
-    test("(PUT) => Should not be update to find an id if invalid token", async () => {
+    test("(PUT) => Should not be update to find an id if token is empty", async () => {
       const response = await request(app)
         .put(`/api/v1/product/6307de214b468ecaa163a39e`)
         .send(PutProductExample);
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual(
+        expect.objectContaining(ErrorExampleResponse)
+      );
+    });
+
+    test("(PUT) => Should not be update to find an id if invalid token", async () => {
+      const response = await request(app)
+        .put(`/api/v1/product/6307de214b468ecaa163a39e`)
+        .send(PutProductExample)
+        .set("Authorization", `Bearer invalid.token`);
       expect(response.statusCode).toBe(401);
       expect(response.body).toEqual(
         expect.objectContaining(ErrorExampleResponse)
@@ -452,10 +495,21 @@ describe("Product Routes", () => {
       );
     });
 
-    test("(PATCH) => Should not be update to find an id if invalid token", async () => {
+    test("(PATCH) => Should not be update to find an id if token is empty", async () => {
       const response = await request(app)
         .patch(`/api/v1/product/6307de214b468ecaa163a39e`)
         .send(PutProductExample);
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual(
+        expect.objectContaining(ErrorExampleResponse)
+      );
+    });
+
+    test("(PATCH) => Should not be update to find an id if invalid token", async () => {
+      const response = await request(app)
+        .patch(`/api/v1/product/6307de214b468ecaa163a39e`)
+        .send(PutProductExample)
+        .set("Authorization", `Bearer invalid.token`);
       expect(response.statusCode).toBe(401);
       expect(response.body).toEqual(
         expect.objectContaining(ErrorExampleResponse)
@@ -504,10 +558,20 @@ describe("Product Routes", () => {
       );
     });
 
-    test("(DELETE) => Should not be delete to find an id if invalid token", async () => {
+    test("(DELETE) => Should not be delete to find an id if token empty", async () => {
       const response = await request(app).delete(
         `/api/v1/product/6307de214b468ecaa163a39e`
       );
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual(
+        expect.objectContaining(ErrorExampleResponse)
+      );
+    });
+
+    test("(DELETE) => Should not be delete to find an id if invalid token", async () => {
+      const response = await request(app)
+        .delete(`/api/v1/product/6307de214b468ecaa163a39e`)
+        .set("Authorization", `Bearer invalid.token`);
       expect(response.statusCode).toBe(401);
       expect(response.body).toEqual(
         expect.objectContaining(ErrorExampleResponse)
@@ -546,8 +610,18 @@ describe("Product Routes", () => {
       );
     });
 
-    test("(GET) => Should not return if invalid token", async () => {
+    test("(GET) => Should not return if token is empty", async () => {
       const response = await request(app).get("/api/v1/product/low_stock");
+      expect(response.statusCode).toBe(401);
+      expect(response.body).toEqual(
+        expect.objectContaining(ErrorExampleResponse)
+      );
+    });
+
+    test("(GET) => Should not return if invalid token", async () => {
+      const response = await request(app)
+        .get("/api/v1/product/low_stock")
+        .set("Authorization", `Bearer invalid.token`);
       expect(response.statusCode).toBe(401);
       expect(response.body).toEqual(
         expect.objectContaining(ErrorExampleResponse)
