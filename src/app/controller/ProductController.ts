@@ -64,8 +64,6 @@ class ProductController {
     } catch (Error) {
       if (Error instanceof FileNotFoundError)
         return res.status(Error.statusCode).json({ Error });
-      if (Error instanceof FileNotFoundError)
-        return res.status(Error.statusCode).json({ Error });
       return res.status(500).json(Error);
     }
   }
