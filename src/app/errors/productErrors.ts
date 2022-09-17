@@ -38,3 +38,15 @@ export class IdInvalidError extends ApiError {
     super("ID format invalid.", 400);
   }
 }
+
+export class FileBigError extends ApiError {
+  constructor() {
+    super("File is too big.", 400);
+  }
+}
+
+export class FileTypeError extends ApiError {
+  constructor() {
+    super("File is not a csv file.", 400);
+  }
+}

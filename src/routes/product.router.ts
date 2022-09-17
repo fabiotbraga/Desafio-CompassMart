@@ -8,13 +8,42 @@ import deleteProductValidation from "../app/validations/Product/DeleteProductVal
 import authenticate from "../app/middlewares/auth";
 import multer from "multer";
 import auth from "../app/middlewares/auth";
+import { FileBigError, FileTypeError } from "../app/errors/productErrors";
 
 const router = Router();
-const multerConfig = multer({ limits: { fileSize: 15000 } });
-const upload = multerConfig.single("file");
-const mainRoute = "/api/v1/product";
+const multerConfig = multer({
+  limits: { fileSize: 14000 },
+  fileFilter: function (req, file, cb) {
+    if (file.mimetype !== "text/csv") {
+      return cb(new FileTypeError());
+    }
+    if (file.size > 14000) {
+      return cb(new FileBigError());
+    }
+    cb(null, true);
+  }
+});
 
-router.post(`${mainRoute}/csv`, authenticate, upload, ProductController.csv);
+const mainRoute = "/api/v1/product";
+const multerMiddleware = function uploadFile(req, res, next) {
+  const upload = multerConfig.single("file");
+
+  upload(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ err });
+    } else if (err) {
+      return res.status(500).json(err);
+    }
+    next();
+  });
+};
+
+router.post(
+  `${mainRoute}/csv`,
+  authenticate,
+  multerMiddleware,
+  ProductController.csv
+);
 router.post(
   `${mainRoute}`,
   authenticate,
